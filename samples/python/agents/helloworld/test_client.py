@@ -41,7 +41,7 @@ async def get_agent_card():
     async with httpx.AsyncClient() as httpx_client:
         resolver = A2ACardResolver(
             httpx_client=httpx_client,
-            base_url='http://127.0.0.1:9999',
+            base_url='http://0.0.0.0:9999',
             # Provide agent_card_path, if your agent uses a different path
             # agent_card_path=''  # noqa: ERA001
         )
@@ -130,7 +130,7 @@ def test_client_workflow(text_query: str = 'Hi there!'):
 
 
 def main():
-    print('\nStarting an internactive session with A2A Server [http://127.0.0.1:9999]')
+    print('\nStarting an internactive session with A2A Server [http://0.0.0.0:9999]')
     print('Use `exit` to quit.')
     prompt = input('user > ')
     while prompt and prompt != 'exit':
