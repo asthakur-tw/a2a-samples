@@ -56,7 +56,7 @@ if __name__ == '__main__':
         supported_interfaces=[
             AgentInterface(
                 protocol_binding='JSONRPC',
-                url='http://127.0.0.1:9999',
+                url='http://0.0.0.0:9999',
             )
         ],
         # The list of AgentSkill objects that this agent offers
@@ -78,7 +78,7 @@ if __name__ == '__main__':
         supported_interfaces=[
             AgentInterface(
                 protocol_binding='JSONRPC',
-                url='http://127.0.0.1:9999',
+                url='http://0.0.0.0:9999',
             )
         ],
         skills=[
@@ -122,5 +122,5 @@ if __name__ == '__main__':
 
     # Run the app
     # Uvicorn is a production-ready ASGI HTTP server
-    uvicorn.run(app, host='127.0.0.1', port=9999)
+    uvicorn.run(app, host='0.0.0.0', port=9999)
     # --8<-- [end:AppServer]
