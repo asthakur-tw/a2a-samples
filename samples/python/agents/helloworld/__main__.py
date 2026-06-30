@@ -18,6 +18,8 @@ from agent_executor import (
     HelloWorldAgentExecutor,  # type: ignore[import-untyped]
 )
 from starlette.applications import Starlette
+from starlette.middleware import Middleware
+from starlette.middleware.cors import CORSMiddleware
 
 
 if __name__ == '__main__':
@@ -27,7 +29,13 @@ if __name__ == '__main__':
     # is set automatically; fall back to localhost for local runs.
     port = int(os.environ.get('PORT', '9999'))
     domain = os.environ.get('RAILWAY_PUBLIC_DOMAIN')
+    custom_domain = os.environ.get('CUSTOM_DOMAIN')
     public_url = f'https://{domain}' if domain else f'http://0.0.0.0:{port}'
+
+    # Allowed CORS origins. Browser clients on these origins may call the agent.
+    allowed_origins = [
+        f'https://{d}' for d in (domain, custom_domain) if d
+    ] or ['*']
 
     skill = AgentSkill(
         id='echo_bot',
@@ -126,7 +134,17 @@ if __name__ == '__main__':
     # Create a web app with the defined routes
     # Here we are using Starlette, a lightweight ASGI web framework to serve the agent
     # Alternatively, you can choose FastAPI or other ASGI frameworks
-    app = Starlette(routes=routes)
+    app = Starlette(
+        routes=routes,
+        middleware=[
+            Middleware(
+                CORSMiddleware,
+                allow_origins=allowed_origins,
+                allow_methods=['*'],
+                allow_headers=['*'],
+            )
+        ],
+    )
 
     # Run the app
     # Uvicorn is a production-ready ASGI HTTP server
