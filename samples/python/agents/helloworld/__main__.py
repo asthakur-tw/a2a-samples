@@ -72,6 +72,7 @@ if __name__ == '__main__':
         supported_interfaces=[
             AgentInterface(
                 protocol_binding='JSONRPC',
+                protocol_version='1.0',
                 url=public_url,
             )
         ],
@@ -94,6 +95,7 @@ if __name__ == '__main__':
         supported_interfaces=[
             AgentInterface(
                 protocol_binding='JSONRPC',
+                protocol_version='1.0',
                 url=public_url,
             )
         ],
