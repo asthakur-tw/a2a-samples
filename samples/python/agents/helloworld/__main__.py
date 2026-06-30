@@ -1,3 +1,5 @@
+import os
+
 import uvicorn
 
 from a2a.server.request_handlers import DefaultRequestHandler
@@ -21,6 +23,12 @@ from starlette.applications import Starlette
 if __name__ == '__main__':
     # --8<-- [start:AgentSkill]
     # Defines the abilities or functions that agent can perform.
+    # Public URL the agent is reachable at. On Railway, RAILWAY_PUBLIC_DOMAIN
+    # is set automatically; fall back to localhost for local runs.
+    port = int(os.environ.get('PORT', '9999'))
+    domain = os.environ.get('RAILWAY_PUBLIC_DOMAIN')
+    public_url = f'https://{domain}' if domain else f'http://0.0.0.0:{port}'
+
     skill = AgentSkill(
         id='echo_bot',
         name='Echo Bot',
@@ -56,7 +64,7 @@ if __name__ == '__main__':
         supported_interfaces=[
             AgentInterface(
                 protocol_binding='JSONRPC',
-                url='http://0.0.0.0:9999',
+                url=public_url,
             )
         ],
         # The list of AgentSkill objects that this agent offers
@@ -78,7 +86,7 @@ if __name__ == '__main__':
         supported_interfaces=[
             AgentInterface(
                 protocol_binding='JSONRPC',
-                url='http://0.0.0.0:9999',
+                url=public_url,
             )
         ],
         skills=[
@@ -122,5 +130,5 @@ if __name__ == '__main__':
 
     # Run the app
     # Uvicorn is a production-ready ASGI HTTP server
-    uvicorn.run(app, host='0.0.0.0', port=9999)
+    uvicorn.run(app, host='0.0.0.0', port=port)
     # --8<-- [end:AppServer]
