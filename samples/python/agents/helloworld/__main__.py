@@ -29,12 +29,17 @@ if __name__ == '__main__':
     # is set automatically; fall back to localhost for local runs.
     port = int(os.environ.get('PORT', '9999'))
     domain = os.environ.get('RAILWAY_PUBLIC_DOMAIN')
-    custom_domain = os.environ.get('CUSTOM_DOMAIN')
+    # CUSTOM_DOMAINS: comma-separated list of extra hostnames.
+    custom_domains = [
+        d.strip()
+        for d in os.environ.get('CUSTOM_DOMAINS', '').split(',')
+        if d.strip()
+    ]
     public_url = f'https://{domain}' if domain else f'http://0.0.0.0:{port}'
 
     # Allowed CORS origins. Browser clients on these origins may call the agent.
     allowed_origins = [
-        f'https://{d}' for d in (domain, custom_domain) if d
+        f'https://{d}' for d in ([domain] + custom_domains) if d
     ] or ['*']
 
     skill = AgentSkill(
